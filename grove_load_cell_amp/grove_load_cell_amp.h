@@ -64,18 +64,28 @@ public:
      * 
      * @return bool
      */
-    bool write_offset(float offset);
+    bool write_offset(long offset);
+
+    /**
+     * Sets the scale for this load cell
+     * 
+     * @param scale - the scale
+     * 
+     * @return bool
+     */
+    bool write_scale(float scale);
 
 private:
     IO_T *io_pd_sck;
     IO_T *io_dout;
     byte GAIN;
-    float OFFSET;
+    long OFFSET = 0;
+    float SCALE = 1.0;
 
     void set_gain(byte gain = 128);
     long _read();
     bool is_ready();
-    float read_average(byte times = 10);
+    long read_average(byte times = 10);
     void tare(byte times = 10);
 };
 

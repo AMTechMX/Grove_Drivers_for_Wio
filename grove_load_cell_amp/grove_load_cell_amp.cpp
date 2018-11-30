@@ -29,6 +29,10 @@
 #include "suli2.h"
 #include "grove_load_cell_amp.h"
 
+#if ARDUINO_VERSION <= 106
+    void yield(void) {};
+#endif
+
 
 GroveLoadCellAmp::GroveLoadCellAmp(int pintx, int pinrx)
 {
@@ -37,6 +41,9 @@ GroveLoadCellAmp::GroveLoadCellAmp(int pintx, int pinrx)
 
     suli_pin_init(io_pd_sck, pinrx, SULI_OUTPUT);
     suli_pin_init(io_dout, pintx, SULI_INPUT);
+
+    set_gain();
+    tare();
 }
 
 void GroveLoadCellAmp::set_gain(byte gain)
@@ -121,5 +128,11 @@ bool GroveLoadCellAmp::write_offset(float offset)
 bool GroveLoadCellAmp::read_weight(float *weight)
 {
     (*weight) = read_average() - OFFSET;
+}
+
+void GroveLoadCellAmp::tare(byte times)
+{
+    double sum = read_average(times);
+    write_offset(sum);
 }
 

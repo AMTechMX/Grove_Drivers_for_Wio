@@ -32,7 +32,7 @@
 
 #include "suli2.h"
 
-//GROVE_NAME        "Grove_Load_Cell_Amp"
+//GROVE_NAME        "Grove - Load Cell Amplifier"
 //SKU               SEN-13879
 //IF_TYPE           UART
 //IMAGE_URL         https://cdn.sparkfun.com//assets/parts/1/1/5/1/0/13879-01.jpg
@@ -76,6 +76,7 @@ private:
     long _read();
     bool is_ready();
     float read_average(byte times = 10);
+    void tare(byte times = 10);
 };
 
 #endif

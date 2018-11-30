@@ -120,14 +120,24 @@ long GroveLoadCellAmp::read_average(byte times)
     return sum / times;
 }
 
-bool GroveLoadCellAmp::write_offset(long offset)
+bool GroveLoadCellAmp::write_offset(float offset)
 {
-    OFFSET = offset;
+    OFFSET = offset * SCALE;
+}
+
+bool GroveLoadCellAmp::read_offset(float *offset)
+{
+    *offset = OFFSET / SCALE;
 }
 
 bool GroveLoadCellAmp::write_scale(float scale)
 {
     SCALE = scale;
+}
+
+bool GroveLoadCellAmp::read_scale(float *scale)
+{
+    *scale = SCALE;
 }
 
 bool GroveLoadCellAmp::read_weight(float *weight)

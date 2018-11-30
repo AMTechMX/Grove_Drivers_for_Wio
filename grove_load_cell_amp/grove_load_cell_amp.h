@@ -58,13 +58,16 @@ public:
     bool read_weight(float *weight);
 
     /**
-     * Sets the offset for next weight readings
+     * Sets the offset in weight units based on the current scale
+     * for next weight readings
      * 
      * @param offset - the offset to set_gain
      * 
      * @return bool
      */
-    bool write_offset(long offset);
+    bool write_offset(float offset);
+
+    bool read_offset(float *offset);
 
     /**
      * Sets the scale for this load cell
@@ -74,6 +77,8 @@ public:
      * @return bool
      */
     bool write_scale(float scale);
+
+    bool read_scale(float *scale);
 
 private:
     IO_T *io_pd_sck;

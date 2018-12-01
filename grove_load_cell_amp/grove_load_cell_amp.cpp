@@ -43,7 +43,7 @@ GroveLoadCellAmp::GroveLoadCellAmp(int pintx, int pinrx)
     suli_pin_init(io_dout, pintx, SULI_INPUT);
 
     set_gain();
-    tare();
+    // tare();
 }
 
 void GroveLoadCellAmp::set_gain(byte gain)
@@ -141,7 +141,6 @@ bool GroveLoadCellAmp::read_weight(float *weight)
 
 void GroveLoadCellAmp::tare(byte times)
 {
-    long sum = read_average(times);
-    write_offset(sum);
+    OFFSET = read_average(times);
 }
 

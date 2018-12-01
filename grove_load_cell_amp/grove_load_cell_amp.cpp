@@ -48,17 +48,12 @@ GroveLoadCellAmp::GroveLoadCellAmp(int pintx, int pinrx)
 
 void GroveLoadCellAmp::set_gain(byte gain)
 {
-    switch (gain)
-    {
-        case 128:
-            GAIN = 1;
-            break;
-        case 64:
-            GAIN = 3;
-            break;
-        case 32:
-            GAIN = 2;
-            break;
+    if (gain < 64) {
+        GAIN = 2;
+    } else if (gain < 128) {
+        GAIN = 3;
+    } else {
+        GAIN = 1;
     }
 
     suli_pin_write(io_pd_sck, SULI_LOW);
@@ -89,7 +84,7 @@ long GroveLoadCellAmp::_read()
 	// set the channel and the gain factor for the next reading using the clock pin
 	for (unsigned int i = 0; i < GAIN; i++) {
         suli_pin_write(io_pd_sck, SULI_HIGH);
-        suli_pin_write(io_pd_sck, LOW);
+        suli_pin_write(io_pd_sck, SULI_LOW);
 	}
 
 	// Replicate the most significant bit to pad out a 32-bit signed integer
@@ -106,7 +101,6 @@ long GroveLoadCellAmp::_read()
 			| static_cast<unsigned long>(data[0]) );
 
 	return static_cast<long>(value);
-
 }
 
 long GroveLoadCellAmp::read_average(byte times)

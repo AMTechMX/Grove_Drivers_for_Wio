@@ -73,8 +73,6 @@ long GroveLoadCellAmp::_read()
     }
 
     unsigned long value = 0;
-	byte data[3] = { 0 };
-	byte filler = 0x00;
 
 	// pulse the clock pin 24 times to read the data
     for (byte i = 0; i < 24 + GAIN; i++) {
@@ -86,17 +84,9 @@ long GroveLoadCellAmp::_read()
     }
 
 	// Replicate the most significant bit to pad out a 32-bit signed integer
-	if (data[2] & 0x80) {
-		filler = 0xFF;
-	} else {
-		filler = 0x00;
+	if (value & 0x800000) {
+		value |= static_cast<unsigned long>(0xff) << 24;
 	}
-
-	// Construct a 32-bit signed integer
-	value = ( static_cast<unsigned long>(filler) << 24
-			| static_cast<unsigned long>(data[2]) << 16
-			| static_cast<unsigned long>(data[1]) << 8
-			| static_cast<unsigned long>(data[0]) );
 
 	return static_cast<long>(value);
 }

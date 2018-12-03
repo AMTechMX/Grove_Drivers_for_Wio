@@ -43,7 +43,7 @@ GroveLoadCellAmp::GroveLoadCellAmp(int pintx, int pinrx)
     suli_pin_init(io_dout, pintx, SULI_INPUT);
 
     set_gain();
-    // tare();
+    tare();
 }
 
 void GroveLoadCellAmp::set_gain(byte gain)

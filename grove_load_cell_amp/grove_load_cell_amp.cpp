@@ -77,15 +77,13 @@ long GroveLoadCellAmp::_read()
 	byte filler = 0x00;
 
 	// pulse the clock pin 24 times to read the data
-	data[2] = suli_shift_in(io_dout, io_pd_sck, MSBFIRST);
-	data[1] = suli_shift_in(io_dout, io_pd_sck, MSBFIRST);
-	data[0] = suli_shift_in(io_dout, io_pd_sck, MSBFIRST);
-
-	// set the channel and the gain factor for the next reading using the clock pin
-	for (unsigned int i = 0; i < GAIN; i++) {
+    for (byte i = 0; i < 24 + GAIN; i++) {
         suli_pin_write(io_pd_sck, SULI_HIGH);
+        if (i < 24) {
+            value = value << 1 | suli_pin_read(io_dout);
+        }
         suli_pin_write(io_pd_sck, SULI_LOW);
-	}
+    }
 
 	// Replicate the most significant bit to pad out a 32-bit signed integer
 	if (data[2] & 0x80) {

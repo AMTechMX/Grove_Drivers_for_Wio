@@ -77,6 +77,7 @@ long GroveLoadCellAmp::_read()
     }
 
     unsigned long value = 0;
+    int dout;
 
     // pulse the clock pin 24 times to read the data
     for (byte i = 0; i < 24 + GAIN; i++)
@@ -86,7 +87,11 @@ long GroveLoadCellAmp::_read()
         delayMicroseconds(1);
         if (i < 24)
         {
-            value = value << 1 | suli_pin_read(io_dout);
+            dout = suli_pin_read(io_dout);
+            value <<= 1;
+            if (dout) {
+                value += 1;
+            }
         }
         suli_pin_write(io_pd_sck, SULI_LOW);
     }
@@ -94,7 +99,7 @@ long GroveLoadCellAmp::_read()
     // Replicate the most significant bit to pad out a 32-bit signed integer
     if (value & 0x800000)
     {
-        value |= static_cast<unsigned long>(0xff) << 24;
+        value |= 0xff000000;
     }
 
     return static_cast<long>(value);

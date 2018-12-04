@@ -30,9 +30,8 @@
 #include "grove_load_cell_amp.h"
 
 #if ARDUINO_VERSION <= 106
-    void yield(void) {};
+void yield(void){};
 #endif
-
 
 GroveLoadCellAmp::GroveLoadCellAmp(int pintx, int pinrx)
 {
@@ -48,12 +47,17 @@ GroveLoadCellAmp::GroveLoadCellAmp(int pintx, int pinrx)
 
 void GroveLoadCellAmp::set_gain(byte gain)
 {
-    if (gain < 64) {
-        GAIN = 2;
-    } else if (gain < 128) {
-        GAIN = 3;
-    } else {
+    switch (gain)
+    {
+    case 128:
         GAIN = 1;
+        break;
+    case 64:
+        GAIN = 3;
+        break;
+    case 32:
+        GAIN = 2;
+        break;
     }
 
     suli_pin_write(io_pd_sck, SULI_LOW);
@@ -74,27 +78,32 @@ long GroveLoadCellAmp::_read()
 
     unsigned long value = 0;
 
-	// pulse the clock pin 24 times to read the data
-    for (byte i = 0; i < 24 + GAIN; i++) {
+    // pulse the clock pin 24 times to read the data
+    for (byte i = 0; i < 24 + GAIN; i++)
+    {
+        delayMicroseconds(1);
         suli_pin_write(io_pd_sck, SULI_HIGH);
-        if (i < 24) {
+        delayMicroseconds(1);
+        if (i < 24)
+        {
             value = value << 1 | suli_pin_read(io_dout);
         }
         suli_pin_write(io_pd_sck, SULI_LOW);
     }
 
-	// Replicate the most significant bit to pad out a 32-bit signed integer
-	if (value & 0x800000) {
-		value |= static_cast<unsigned long>(0xff) << 24;
-	}
+    // Replicate the most significant bit to pad out a 32-bit signed integer
+    if (value & 0x800000)
+    {
+        value |= static_cast<unsigned long>(0xff) << 24;
+    }
 
-	return static_cast<long>(value);
+    return static_cast<long>(value);
 }
 
 long GroveLoadCellAmp::read_average(byte times)
 {
     long sum = 0;
-    for (byte i = 0; i < times; i ++) 
+    for (byte i = 0; i < times; i++)
     {
         sum += _read();
         yield();
@@ -131,4 +140,3 @@ void GroveLoadCellAmp::tare(byte times)
 {
     OFFSET = read_average(times);
 }
-

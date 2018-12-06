@@ -105,7 +105,7 @@ long GroveLoadCellAmp::_read()
     return static_cast<long>(value);
 }
 
-long GroveLoadCellAmp::read_average(byte times)
+long GroveLoadCellAmp::get_average(byte times)
 {
     long sum = 0;
     for (byte i = 0; i < times; i++)
@@ -119,29 +119,39 @@ long GroveLoadCellAmp::read_average(byte times)
 bool GroveLoadCellAmp::write_offset(float offset)
 {
     OFFSET = offset * SCALE;
+    return true;
 }
 
 bool GroveLoadCellAmp::read_offset(float *offset)
 {
     *offset = OFFSET / SCALE;
+    return true;
 }
 
 bool GroveLoadCellAmp::write_scale(float scale)
 {
     SCALE = scale;
+    return true;
+}
+
+bool GroveLoadCellAmp::write_tare()
+{
+    return true;
 }
 
 bool GroveLoadCellAmp::read_scale(float *scale)
 {
     *scale = SCALE;
+    return true;
 }
 
 bool GroveLoadCellAmp::read_weight(float *weight)
 {
-    (*weight) = (read_average() - OFFSET) / SCALE;
+    (*weight) = (get_average() - OFFSET) / SCALE;
+    return true;
 }
 
 void GroveLoadCellAmp::tare(byte times)
 {
-    OFFSET = read_average(times);
+    OFFSET = get_average(times);
 }

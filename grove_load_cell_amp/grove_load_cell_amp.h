@@ -70,6 +70,11 @@ public:
     bool read_offset(float *offset);
 
     /**
+     * Tare the weight sensor
+     */
+    bool write_tare();
+
+    /**
      * Sets the scale for this load cell
      * 
      * @param scale - the scale
@@ -90,7 +95,7 @@ private:
     void set_gain(byte gain = 128);
     long _read();
     bool is_ready();
-    long read_average(byte times = 10);
+    long get_average(byte times = 10);
     void tare(byte times = 10);
 };
 

@@ -42,7 +42,6 @@ GroveLoadCellAmp::GroveLoadCellAmp(int pintx, int pinrx)
     suli_pin_init(io_dout, pintx, SULI_INPUT);
 
     set_gain();
-    tare();
     powered_on = true;
 }
 
@@ -61,7 +60,7 @@ void GroveLoadCellAmp::set_gain(byte gain)
         break;
     }
 
-    suli_pin_write(io_pd_sck, SULI_LOW);
+    write_power(1);
     _read();
 }
 
@@ -72,7 +71,7 @@ bool GroveLoadCellAmp::is_ready()
 
 long GroveLoadCellAmp::_read()
 {
-    if (powered_on) {
+    if (!powered_on) {
         return 0;
     }
 

@@ -58,6 +58,11 @@ public:
     bool read_weight(float *weight);
 
     /**
+     * Power on or off depending on the onoff parameter
+     */
+    bool write_power(int onoff);
+
+    /**
      * Sets the offset in weight units based on the current scale
      * for next weight readings
      * 
@@ -85,12 +90,16 @@ public:
 
     bool read_scale(float *scale);
 
+    char *get_last_error() { return error_desc; };
+
 private:
     IO_T *io_pd_sck;
     IO_T *io_dout;
     byte GAIN;
     long OFFSET = 0;
     float SCALE = 1.0;
+    int powered_on = false;
+    char *error_desc;
 
     void set_gain(byte gain = 128);
     long _read();

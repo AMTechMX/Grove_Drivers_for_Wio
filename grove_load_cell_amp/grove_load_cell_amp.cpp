@@ -43,6 +43,7 @@ GroveLoadCellAmp::GroveLoadCellAmp(int pintx, int pinrx)
 
     set_gain();
     tare();
+    powered_on = true;
 }
 
 void GroveLoadCellAmp::set_gain(byte gain)
@@ -71,6 +72,10 @@ bool GroveLoadCellAmp::is_ready()
 
 long GroveLoadCellAmp::_read()
 {
+    if (powered_on) {
+        return 0;
+    }
+
     while (!is_ready())
     {
         yield();
@@ -107,6 +112,9 @@ long GroveLoadCellAmp::_read()
 
 long GroveLoadCellAmp::get_average(byte times)
 {
+    if (!powered_on) {
+        return 0;
+    }
     long sum = 0;
     for (byte i = 0; i < times; i++)
     {
@@ -136,6 +144,18 @@ bool GroveLoadCellAmp::write_scale(float scale)
 
 bool GroveLoadCellAmp::write_tare()
 {
+    tare();
+    return true;
+}
+
+bool GroveLoadCellAmp::write_power(int onoff)
+{
+    suli_pin_write(io_pd_sck, SULI_LOW);
+    if (!onoff)
+    {
+        suli_pin_write(io_pd_sck, SULI_HIGH);
+    }
+    powered_on = static_cast<bool>(onoff);
     return true;
 }
 
@@ -147,6 +167,10 @@ bool GroveLoadCellAmp::read_scale(float *scale)
 
 bool GroveLoadCellAmp::read_weight(float *weight)
 {
+    if (!powered_on) {
+        error_desc = "Cannot read weight if the scale is powered off";
+        return false;
+    }
     (*weight) = (get_average() - OFFSET) / SCALE;
     return true;
 }

@@ -45,7 +45,7 @@ GroveLoadCellAmp::GroveLoadCellAmp(int pintx, int pinrx)
     powered_on = true;
 }
 
-void GroveLoadCellAmp::set_gain(byte gain)
+void GroveLoadCellAmp::set_gain(byte gain)  
 {
     switch (gain)
     {
@@ -123,15 +123,15 @@ long GroveLoadCellAmp::get_average(byte times)
     return sum / times;
 }
 
-bool GroveLoadCellAmp::write_offset(float offset)
+bool GroveLoadCellAmp::write_offset(int offset)
 {
-    OFFSET = offset * SCALE;
+    OFFSET = offset;
     return true;
 }
 
-bool GroveLoadCellAmp::read_offset(float *offset)
+bool GroveLoadCellAmp::read_offset(int *offset)
 {
-    *offset = OFFSET / SCALE;
+    *offset = OFFSET;
     return true;
 }
 

@@ -63,16 +63,15 @@ public:
     bool write_power(int onoff);
 
     /**
-     * Sets the offset in weight units based on the current scale
-     * for next weight readings
+     * Sets the offset
      * 
-     * @param offset - the offset to set_gain
+     * @param offset - the offset to set
      * 
      * @return bool
      */
-    bool write_offset(float offset);
+    bool write_offset(int offset);
 
-    bool read_offset(float *offset);
+    bool read_offset(int *offset);
 
     /**
      * Tare the weight sensor
@@ -96,7 +95,7 @@ private:
     IO_T *io_pd_sck;
     IO_T *io_dout;
     byte GAIN;
-    long OFFSET = 0;
+    int OFFSET = 0;
     float SCALE = 1.0;
     int powered_on = false;
     char *error_desc;

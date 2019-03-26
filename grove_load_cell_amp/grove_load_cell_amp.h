@@ -62,33 +62,6 @@ public:
      */
     bool write_power(int onoff);
 
-    /**
-     * Sets the offset
-     * 
-     * @param offset - the offset to set
-     * 
-     * @return bool
-     */
-    bool write_offset(int offset);
-
-    bool read_offset(int *offset);
-
-    /**
-     * Tare the weight sensor
-     */
-    bool write_tare();
-
-    /**
-     * Sets the scale for this load cell
-     * 
-     * @param scale - the scale
-     * 
-     * @return bool
-     */
-    bool write_scale(float scale);
-
-    bool read_scale(float *scale);
-
     char *get_last_error() { return error_desc; };
 
 private:

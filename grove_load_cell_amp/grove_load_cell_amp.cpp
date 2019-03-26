@@ -123,30 +123,6 @@ long GroveLoadCellAmp::get_average(byte times)
     return sum / times;
 }
 
-bool GroveLoadCellAmp::write_offset(int offset)
-{
-    OFFSET = offset;
-    return true;
-}
-
-bool GroveLoadCellAmp::read_offset(int *offset)
-{
-    *offset = OFFSET;
-    return true;
-}
-
-bool GroveLoadCellAmp::write_scale(float scale)
-{
-    SCALE = scale;
-    return true;
-}
-
-bool GroveLoadCellAmp::write_tare()
-{
-    tare();
-    return true;
-}
-
 bool GroveLoadCellAmp::write_power(int onoff)
 {
     suli_pin_write(io_pd_sck, SULI_LOW);
@@ -155,12 +131,6 @@ bool GroveLoadCellAmp::write_power(int onoff)
         suli_pin_write(io_pd_sck, SULI_HIGH);
     }
     powered_on = static_cast<bool>(onoff);
-    return true;
-}
-
-bool GroveLoadCellAmp::read_scale(float *scale)
-{
-    *scale = SCALE;
     return true;
 }
 

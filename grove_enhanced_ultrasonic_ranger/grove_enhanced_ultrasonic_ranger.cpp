@@ -34,6 +34,7 @@
 GroveEnhancedUltraRanger::GroveEnhancedUltraRanger(int pin)
 {
     this->io = (IO_T *)malloc(sizeof(IO_T));
+    this->timer = (TIMER_T *)malloc(sizeof(TIMER_T));
 
     suli_pin_init(io, pin, SULI_OUTPUT);
     on_power_on();
@@ -56,12 +57,12 @@ bool GroveEnhancedUltraRanger::read_range_in_cm(float *range_cm)
     return true;
 }
 
-bool GroveEnhancedUltraRanger::read_range_in_inch(float *range_inch)
-{
-    uint32_t d = _get_pulse_width();
-    *range_inch = d / 74.7 / 2;
-    return true;
-}
+// bool GroveEnhancedUltraRanger::read_range_in_inch(float *range_inch)
+// {
+//     uint32_t d = _get_pulse_width();
+//     *range_inch = d / 74.7 / 2;
+//     return true;
+// }
 
 uint32_t GroveEnhancedUltraRanger::_get_pulse_width()
 {
@@ -77,10 +78,12 @@ uint32_t GroveEnhancedUltraRanger::_get_pulse_width()
 
 void GroveEnhancedUltraRanger::compute_distance() {
     uint32_t d = _get_pulse_width();
-    float range_inch = d / 74.7 / 2;
     float range_cm = d / 29.4 / 2;
-    POST_EVENT(distance_change_inch, &range_inch);
-    POST_EVENT(distance_change_cm, &range_cm);
+    range_cm = max(range_cm, MAX_DISTANCE);
+    if (previous_read == -1 || range_cm != previous_read) {
+        previous_read = range_cm;
+        POST_EVENT(distance_change_cm, &range_cm);
+    }
 }
 
 static void timer_handler_distance_change(void *para) {

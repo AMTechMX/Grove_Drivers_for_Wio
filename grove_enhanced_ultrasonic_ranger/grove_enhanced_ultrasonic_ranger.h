@@ -32,6 +32,8 @@
 
 #include "suli2.h"
 
+#define MAX_DISTANCE 150.0
+
 //GROVE_NAME        "Grove - Enhanced Ultrasonic Ranger"
 //SKU               101020010_ENH
 //IF_TYPE           GPIO
@@ -59,24 +61,15 @@ public:
      */
     bool read_range_in_cm(float *range_cm);
 
-    /**
-     * Get the range / distance between sensor and object.
-     *
-     * @param range_cm - unit: inch
-     *
-     * @return bool
-     */
-    bool read_range_in_inch(float *range_inch);
-
     void compute_distance();
 
     DEFINE_EVENT(distance_change_cm, SULI_EDT_FLOAT);
-    DEFINE_EVENT(distance_change_inch, SULI_EDT_FLOAT);
 
 
 private:
     IO_T *io;
     TIMER_T *timer;
+    float previous_read = -1;
 
     uint32_t _get_pulse_width();
 };

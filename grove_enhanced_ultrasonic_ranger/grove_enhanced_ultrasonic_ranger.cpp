@@ -79,7 +79,7 @@ uint32_t GroveEnhancedUltraRanger::_get_pulse_width()
 void GroveEnhancedUltraRanger::compute_distance() {
     uint32_t d = _get_pulse_width();
     float range_cm = d / 29.4 / 2;
-    range_cm = max(range_cm, MAX_DISTANCE);
+    range_cm = min(range_cm, MAX_DISTANCE);
     if (previous_read == -1 || range_cm != previous_read) {
         previous_read = range_cm;
         POST_EVENT(distance_change_cm, &range_cm);

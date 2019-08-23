@@ -82,7 +82,7 @@ void GroveEnhancedUltraRanger::compute_distance() {
     range_cm = min(range_cm, MAX_DISTANCE);
     if (previous_read == -1 || range_cm != previous_read) {
         previous_read = range_cm;
-        POST_EVENT(distance_change_cm, &range_cm);
+        POST_EVENT_IN_INSTANCE(this, distance_change_cm, &range_cm);
     }
 }
 

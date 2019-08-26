@@ -34,6 +34,13 @@
 
 #define MAX_DISTANCE 150.0
 
+#define LINK_D0 14
+#define LINK_D1 12
+#define LINK_D2 13
+
+#define NODE_D0 3
+#define NODE_D1 5
+
 //GROVE_NAME        "Grove - Enhanced Ultrasonic Ranger"
 //SKU               101020010_ENH
 //IF_TYPE           GPIO
@@ -63,13 +70,15 @@ public:
 
     void compute_distance();
 
-    DEFINE_EVENT(distance_change_cm, SULI_EDT_FLOAT);
+    DEFINE_EVENT(distance_change_cm, SULI_EDT_STRING);
 
 
 private:
     IO_T *io;
     TIMER_T *timer;
     float previous_read = -1;
+
+    int portNo;
 
     uint32_t _get_pulse_width();
 };

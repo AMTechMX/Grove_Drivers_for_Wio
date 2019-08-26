@@ -39,6 +39,8 @@ GroveEnhancedUltraRanger::GroveEnhancedUltraRanger(int pin)
     suli_pin_init(io, pin, SULI_OUTPUT);
     on_power_on();
 
+    this->buffer = (char *)malloc(50);
+
     switch(pin) {
         case LINK_D0:
         case NODE_D0:
@@ -91,14 +93,13 @@ uint32_t GroveEnhancedUltraRanger::_get_pulse_width()
 }
 
 void GroveEnhancedUltraRanger::compute_distance() {
-    char buffer[50];
     uint32_t d = _get_pulse_width();
     float range_cm = d / 29.4 / 2;
     range_cm = min(range_cm, MAX_DISTANCE);
     if (previous_read == -1 || range_cm != previous_read) {
         previous_read = range_cm;
         sprintf(buffer, "{\"port\": \"D%d\", \"val\": \"%f\"", this->portNo, range_cm);
-        POST_EVENT_IN_INSTANCE(this, distance_change_cm, &buffer);
+        POST_EVENT_IN_INSTANCE(this, distance_change_cm, buffer);
     }
 }
 

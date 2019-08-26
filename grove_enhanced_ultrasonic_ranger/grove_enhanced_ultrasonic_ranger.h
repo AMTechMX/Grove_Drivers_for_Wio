@@ -79,6 +79,7 @@ private:
     float previous_read = -1;
 
     int portNo;
+    char *buffer;
 
     uint32_t _get_pulse_width();
 };
